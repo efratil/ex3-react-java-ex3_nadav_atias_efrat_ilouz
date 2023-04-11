@@ -1,5 +1,6 @@
 import {Button } from 'react-bootstrap';
-const PickNumber = (index)=>{
-    return (<Button type="button" className="btn btn-outline-light">{index}</Button>);
+
+const PickNumber = (index,{setInput})=>{
+    return (<Button type="button" value=index className="btn btn-outline-light btn-lg" onClick={(e) => setInput(e.target.value)}> </Button>);
 }
 export default PickNumber;
