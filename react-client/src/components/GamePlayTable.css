@@ -1,0 +1,13 @@
+.code {
+    display: inline-block;
+    width: 22px;
+    height: 26px;
+    font: 20px Verdana;
+    background-color: #def;
+    margin: 3px 5px;
+    border: 1px solid white;
+    user-select: none;
+}
+.card-body{
+    color: var(--bs-card-color);
+}
