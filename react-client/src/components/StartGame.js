@@ -1,4 +1,5 @@
-import {Button, Col} from "react-bootstrap";
+import {Button, Col, Form} from "react-bootstrap";
+
 export const randNewSecretList = () =>{
     const shuffleArray = (array) => { // !: Fisher-Yates shuffle algorithm
         for (let i = array.length - 1; i > 0; i--) {
@@ -12,16 +13,19 @@ export const randNewSecretList = () =>{
     console.log(newList);
     return newList;
 }
-const StartGame = ({setSecretList})=>{
+const StartGame = ({initSecretList, initGuessList, initMessage})=>{
 
-
-    return (<Col className={'p-3'}><Button type="button"
-                                           className="btn btn-success btn-lg"
-                                           onClick={() => setSecretList(randNewSecretList())}
+    const handleClick = (e) =>{
+        initSecretList(randNewSecretList());
+        initGuessList ([]);
+        initMessage   ("Your history of guesses will appear below:");
+        e.stopPropagation();
+    }
+    return (<Button type="button"
+                                           className="btn btn-success btn-lg me-5"
+                                           onClick={(e) => handleClick(e) }
                                     >Start new game
                                     </Button>
-            </Col>
-
     );
 }
 export default StartGame;

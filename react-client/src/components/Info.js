@@ -1,11 +1,11 @@
 import {Card, Row} from "react-bootstrap";
 
-const Info = ()=>{
+const Info = ({message})=>{
     return ( <Row className={'mb-4 p-3'} >
         <Card style={{ backgroundColor: 'rgba(0, 128, 255, 0.22)' }}>
             <Card.Body >
                 <Card.Text className="text-center">
-                    Your history of guesses will appear below:
+                    {message}
                 </Card.Text>
             </Card.Body>
         </Card>

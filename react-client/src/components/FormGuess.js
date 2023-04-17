@@ -2,7 +2,7 @@ import {Form,Row, Col, Button} from "react-bootstrap";
 import SelectButton from "./SelectButton";
 import {useState} from "react";
 
-const FormGuess = ({list,updateList,secretList})=>{
+const FormGuess = ({list,updateList,secretList,updateMessage})=>{
     const [guess, setGuess] = useState([null, null, null, null]);
 
     const checkGuess = () =>{
@@ -10,15 +10,26 @@ const FormGuess = ({list,updateList,secretList})=>{
         const bulls = guess.filter((value, index) => secretList[index] === parseInt(value)).length;
         return {cows, bulls};
     }
-    const handleSubmit = (e) => {
+    function hasDuplicates() {
+        return new Set(guess).size !== guess.length;
+    }
+    const handleSubmit = () => {
+        if (guess.filter((value) => value === null).length > 0){
+            updateMessage("Please Select 4 Digits !");
+            return;
+        }
+        if(hasDuplicates()){
+            updateMessage("You selected 2 or more identical numbers");
+            return;
+        }
         const guessResult = checkGuess();
         const newList = [...list,
             {   guess: guess[0]+ " " + guess[1] + " " + guess[2] + " " + guess[3],
                 bulls: guessResult.bulls,
                 cows : guessResult.cows}
         ];
-        console.log(newList);
         updateList(newList);
+        guessResult.bulls !== 4 ? updateMessage(`Your Guess: ${guessResult.bulls} Bulls & ${guessResult.cows} Cows`): updateMessage("You Won!");
     }
 
     return (<Form>
