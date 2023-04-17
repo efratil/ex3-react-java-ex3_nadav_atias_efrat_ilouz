@@ -1,27 +1,12 @@
-import './Background.css';
-import NumberGrid from "./NumberGrid";
-import GamePlayTable from "./GamePlayTable";
-import StartGame from "./StartGame";
-import Go from "./Go";
-import {useState} from "react";
+import background from '../bullsAndCows.jpg';
+import {Row,Card } from "react-bootstrap";
+
 const Background = () => {
-    const [inputFields, renderInput] = useState(Array(4).fill('?'))
-
-    return(
-        <section className="w-100 px-4 py-5 background" style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
-            <div className="row d-flex justify-content-center">
-                <div >
-                <GamePlayTable
-                    inputFields = {inputFields}
-                />
-                <NumberGrid
-                    inputFields = {inputFields}
-                />
-                </div>
-                <div> <Go/>   <StartGame/></div>
-
-            </div>
-         </section>);
+    return(<Row>
+             <Card>
+                 <Card.Body><Card.Img className="img-fluid " src={background}  alt="Responsive image" style={{height:'30rem',width: '80rem'}}></Card.Img></Card.Body>
+             </Card>
+          </Row>);
 }
 
 export default Background;

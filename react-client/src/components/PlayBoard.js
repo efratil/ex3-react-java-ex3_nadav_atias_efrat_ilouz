@@ -1,16 +1,32 @@
+import {Container, Row, Col} from 'react-bootstrap';
+import { useState } from 'react';
+import  GuessHistoryTable from './GuessHistoryTable';
+import FormGuess from "./FormGuess";
+import StartGame, {randNewSecretList} from "./StartGame";
 import Background from "./Background";
-import StartGame from "./StartGame";
-import {useState} from "react";
-const PlayBoard = () => {
+import Info from "./Info";
+
+const  PlayBoard = () => {
+
+    const [guessList, setGuessList] = useState([{guess:"1 2 3 4", bulls:0,cows:0}]);
+    const [secretList,setSecretList] = useState([]);
 
     return(
-        <section className="gradient-custom">
-        <div className="mb-md-5 mt-md-4 pb-5">
-        <div className="bg-white border rounded-5" style={{borderRadius: '.5rem .5rem 0 0', display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
+        <Container className="bg-size bg-size-md bg-position-center border" style={{ backgroundColor:  'rgba(255, 255, 0, 0.5)' }} >
             <Background/>
-        </div>
-         </div>
-        </section>
+            <Row>
+                <StartGame setSecretList = {setSecretList}/>
+            </Row>
+            <Row>
+                <FormGuess list = {guessList} updateList={setGuessList} secretList ={secretList}/>
+            </Row>
+            <Info/>
+            <Row>
+                <Col >
+                    <GuessHistoryTable list = {guessList} />
+                </Col>
+            </Row>
+        </Container>
     );
 }
 export default PlayBoard;
