@@ -1,10 +1,7 @@
 import {Container, Row, Col, Card, Form} from 'react-bootstrap';
 import { useState } from 'react';
-import  GuessHistoryTable from './GuessHistoryTable';
-import FormGuess from "./FormGuess";
-import StartGame, {randNewSecretList} from "./StartGame";
+import StartGame from "./StartGame";
 import Background from "./Background";
-import Info from "./Info";
 import background from "../bullsAndCows.jpg";
 import GameRules from "./GameRules";
 import WinState from "./winState";
@@ -15,11 +12,10 @@ const  PlayBoard = () => {
     const [guessList,    setGuessList]       = useState([]);
     const [secretList,   setSecretList]      = useState([]);
     const [message,      setMessage]         = useState("Your history of guesses will appear below:");
-
     return(
         <>
        <div style={{backgroundImage: `url(${background})`, position: 'fixed', width: '100%', height: '100%', opacity: '0.4', zIndex: '-1'}}></div>
-        <Container className="border" style={{ backgroundColor:  'rgba(250, 213, 39, 0.9)' }} >
+        <Container className={'border'} style={{ backgroundColor:  'rgba(250, 213, 39, 0.9)' }} >
             <Background/>
             <Row >
                 <Form className={'p-2'}>

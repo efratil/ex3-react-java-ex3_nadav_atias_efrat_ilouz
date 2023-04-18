@@ -1,4 +1,5 @@
-import {Button, Col, Form} from "react-bootstrap";
+import {Button, Col, Form, Spinner} from "react-bootstrap";
+import { useEffect, useRef, useState } from 'react';
 
 export const randNewSecretList = () =>{
     const shuffleArray = (array) => { // !: Fisher-Yates shuffle algorithm
@@ -13,19 +14,44 @@ export const randNewSecretList = () =>{
     console.log(newList);
     return newList;
 }
-const StartGame = ({initSecretList, initGuessList, initMessage})=>{
 
-    const handleClick = (e) =>{
+const StartGame = ({initSecretList, initGuessList, initMessage}) =>{
+    const isFirstRender = useRef(true);
+    const [isLoading, setLoading] = useState(false);
+
+    const handleClick = async (e) =>{
+        setLoading(true);
         initSecretList(randNewSecretList());
         initGuessList ([]);
         initMessage   ("Your history of guesses will appear below:");
+        await new Promise(resolve => setTimeout(resolve, 1000)); // wait for 1 second
+        setLoading(false);
         e.stopPropagation();
     }
-    return (<Button type="button"
-                                           className="btn btn-success btn-lg me-5"
-                                           onClick={(e) => handleClick(e) }
-                                    >Start new game
-                                    </Button>
+
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        initSecretList(randNewSecretList());
+    }, [initSecretList]);
+
+    return (
+        <>
+            {isLoading ? (
+                <Button className="btn btn-success btn-lg me-5" disabled>
+                    <Spinner animation="border" role="status" size="sm" />
+                    <span className="visually-hidden">Loading...</span>
+                </Button> ) : (
+                <Button type="button"
+                        className="btn btn-success btn-lg me-5"
+                        onClick={(e) => handleClick(e) } >
+                    Start new game
+                </Button>
+            )}
+        </>
     );
 }
+
 export default StartGame;

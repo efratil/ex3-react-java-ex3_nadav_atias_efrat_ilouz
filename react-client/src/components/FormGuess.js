@@ -15,7 +15,7 @@ const FormGuess = ({list,updateList,secretList,updateMessage})=>{
     }
     const handleSubmit = () => {
         if (guess.filter((value) => value === null).length > 0){
-            updateMessage("Please Select 4 Digits !");
+            updateMessage("Please select 4 digits!");
             return;
         }
         if(hasDuplicates()){
@@ -29,7 +29,7 @@ const FormGuess = ({list,updateList,secretList,updateMessage})=>{
                 cows : guessResult.cows}
         ];
         updateList(newList);
-        guessResult.bulls !== 4 ? updateMessage(`Your Guess: ${guessResult.bulls} Bulls & ${guessResult.cows} Cows`): updateMessage("You Won!");
+        guessResult.bulls !== 4 ? updateMessage(`Your guess: ${guessResult.bulls} Bulls and ${guessResult.cows} Cows`): updateMessage("You Won!");
     }
 
     return (<Form>
