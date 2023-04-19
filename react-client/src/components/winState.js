@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { Card, Row, Form, Button } from "react-bootstrap";
+import { Card, Row, Form, Button, Table, Col } from "react-bootstrap";
 
 const WinState = ({ guessList }) => {
     const [name, setName] = useState("");
+    const [showHighScoreTable, setShowHighScoreTable] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // servelt
+        setName(e.target.elements.name.value);
+        setShowHighScoreTable(true);
     };
 
     return (
@@ -21,11 +23,39 @@ const WinState = ({ guessList }) => {
                     </Card.Text>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Control type="name" placeholder="Enter your name" required />
+                            <Form.Control type="text" name="name" placeholder="Enter your name" required/>
                         </Form.Group>
-                        <div style={{ marginTop: '10px' }}></div>
+                        <div style={{ marginTop: "10px" }}></div>
                         <Button type="submit">Submit</Button>
                     </Form>
+
+                    {showHighScoreTable && (
+                        <div style={{ marginTop: "10px" }}>
+                            <Row>
+                                <Col>
+                                    <Card.Title className={"text-center"} style={{ fontSize: "24px", fontWeight: "bold" }}>
+                                        High Score
+                                    </Card.Title>
+                                    <Table striped bordered hover>
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Username</th>
+                                            <th>Score</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>{name}</td>
+                                            <td>{guessList.length}</td>
+                                        </tr>
+                                        </tbody>
+                                    </Table>
+                                </Col>
+                            </Row>
+                        </div>
+                    )}
                 </Card.Body>
             </Card>
         </Row>

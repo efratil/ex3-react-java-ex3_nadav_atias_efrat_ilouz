@@ -1,5 +1,5 @@
-import {Button, Col, Form, Spinner} from "react-bootstrap";
-import { useEffect, useRef, useState } from 'react';
+import {Button, Spinner} from "react-bootstrap";
+import { useEffect, useState } from 'react';
 
 export const randNewSecretList = () =>{
     const shuffleArray = (array) => { // !: Fisher-Yates shuffle algorithm
@@ -16,8 +16,8 @@ export const randNewSecretList = () =>{
 }
 
 const StartGame = ({initSecretList, initGuessList, initMessage}) =>{
-    const isFirstRender = useRef(true);
     const [isLoading, setLoading] = useState(false);
+    const [isFirstRender, setIsFirstRender] = useState(true);
 
     const handleClick = async (e) =>{
         setLoading(true);
@@ -30,12 +30,11 @@ const StartGame = ({initSecretList, initGuessList, initMessage}) =>{
     }
 
     useEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            return;
+        if (isFirstRender) {
+            setIsFirstRender(false);
+            initSecretList(randNewSecretList());
         }
-        initSecretList(randNewSecretList());
-    }, [initSecretList]);
+    }, [isFirstRender, initSecretList]);
 
     return (
         <>
