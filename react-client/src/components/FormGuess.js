@@ -58,13 +58,13 @@ const FormGuess = ({list,updateList,secretList,updateMessage})=>{
                    <SelectButton index={0} guess ={guess} setGuess={setGuess} />
                 </Col>
                  <Col>
-                    <SelectButton index={1} guess ={guess} setGuess={setGuess}/>
+                    <SelectButton index={1} guess ={guess} setGuess={setGuess} />
                  </Col>
                  <Col>
                      <SelectButton index={2} guess ={guess} setGuess={setGuess}/>
                  </Col>
                  <Col >
-                     <SelectButton index={3} guess ={guess} setGuess={setGuess}/>
+                     <SelectButton index={3} guess ={guess} setGuess={setGuess} />
                  </Col>
              </Row>
             <Button

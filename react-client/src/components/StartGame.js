@@ -27,7 +27,10 @@ export const randNewSecretList = () =>{
  */
 const StartGame = ({initSecretList, initGuessList, initMessage}) =>{
     const [isLoading, setLoading] = useState(false);
-    const [isFirstRender, setIsFirstRender] = useState(true);
+
+    useEffect(() => {
+        initSecretList(randNewSecretList());
+    }, []);
 
     /**
      * This function is used as an event handler for the click event of the start game button.
@@ -43,19 +46,11 @@ const StartGame = ({initSecretList, initGuessList, initMessage}) =>{
         e.stopPropagation();
     }
 
-    useEffect(() => {
-        if (isFirstRender) {
-            setIsFirstRender(false);
-            initSecretList(randNewSecretList());
-        }
-    }, [isFirstRender, initSecretList]);
-
     return (
         <>
             {isLoading ? (
                 <Button className="btn btn-success btn-lg me-5" disabled>
                     <Spinner animation="border" role="status" size="sm" />
-                    <span className="visually-hidden">Loading...</span>
                 </Button> ) : (
                 <Button type="button"
                         className="btn btn-success btn-lg me-5"

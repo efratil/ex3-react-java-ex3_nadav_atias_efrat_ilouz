@@ -14,8 +14,6 @@ import java.util.stream.Collectors;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
-import static java.lang.System.out;
-
 @WebServlet(name = "ServletApi", value = "/api/highscores")
 public class ApiServlet extends HttpServlet {
     private static File file;
@@ -80,10 +78,11 @@ public class ApiServlet extends HttpServlet {
      * @return A list of PlayerInfo objects containing the high scores.
      * @throws IOException if there is an error reading the file.
      */
-    private static List<PlayerInfo> readHighScoresFromFile() {
+    private List<PlayerInfo> readHighScoresFromFile() {
         checkIfFileExist();
         List<PlayerInfo> highScoresList = new ArrayList<>();
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(Files.newInputStream(file.toPath()))) {
+        synchronized(this) {
+            try (ObjectInputStream objectInputStream = new ObjectInputStream(Files.newInputStream(file.toPath()))) {
             highScoresList = (List<PlayerInfo>) objectInputStream.readObject();
         } catch (EOFException ignored) {
         }
@@ -91,6 +90,7 @@ public class ApiServlet extends HttpServlet {
             System.err.println("Failed to read high scores file");
             e.printStackTrace();
         }
+     }
         return highScoresList;
     }
 
