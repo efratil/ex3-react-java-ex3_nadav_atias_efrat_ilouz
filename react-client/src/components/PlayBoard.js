@@ -6,9 +6,13 @@ import background from "../bullsAndCows.jpg";
 import GameRules from "./GameRules";
 import WinState from "./winState";
 import GamePlayState from "./GamePlayState";
-
+/**
+ * PlayBoard component is the top level component for the Bulls and Cows game.
+ * It contains the StartGame, GameRules, GamePlayState and WinState components.
+ * It uses state hooks to keep track of guessList, secretList and message.
+ * @returns JSX element containing the PlayBoard component.
+ */
 const  PlayBoard = () => {
-
     const [guessList,    setGuessList]       = useState([]);
     const [secretList,   setSecretList]      = useState([]);
     const [message,      setMessage]         = useState("Your history of guesses will appear below:");

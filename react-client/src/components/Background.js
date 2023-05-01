@@ -1,5 +1,8 @@
 import background from '../bullsAndCows.jpg';
 import { Row, Card } from 'react-bootstrap';
+/**
+  displays the background image and title for the Bulls and Cows game.
+ */
 
 const Background = () => {
     return (

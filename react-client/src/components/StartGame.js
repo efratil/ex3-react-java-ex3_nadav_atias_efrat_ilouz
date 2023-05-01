@@ -1,6 +1,9 @@
 import {Button, Spinner} from "react-bootstrap";
 import { useEffect, useState } from 'react';
 
+/**
+A lottery of the four numbers the player must guess to win the game
+ */
 export const randNewSecretList = () =>{
     const shuffleArray = (array) => { // !: Fisher-Yates shuffle algorithm
         for (let i = array.length - 1; i > 0; i--) {
@@ -14,11 +17,22 @@ export const randNewSecretList = () =>{
     console.log(newList);
     return newList;
 }
-
+/**
+ * A component that renders a button to start a new game in the Bulls and Cows game.
+ * @param {Object} props - The component props.
+ * @param {function} props.initSecretList - A function to initialize the secret list.
+ * @param {function} props.initGuessList - A function to initialize the guess list.
+ * @param {function} props.initMessage - A function to initialize the message display.
+ * @returns {JSX.Element} - A button element.
+ */
 const StartGame = ({initSecretList, initGuessList, initMessage}) =>{
     const [isLoading, setLoading] = useState(false);
     const [isFirstRender, setIsFirstRender] = useState(true);
 
+    /**
+     * This function is used as an event handler for the click event of the start game button.
+     * It initializes the secret list, guess list, and message display with default values.
+     */
     const handleClick = async (e) =>{
         setLoading(true);
         initSecretList(randNewSecretList());

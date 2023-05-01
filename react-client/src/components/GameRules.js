@@ -1,9 +1,16 @@
 import {Button, Card, Collapse} from "react-bootstrap";
 import {useState} from "react";
 
+/**
+ GameRules component displays a button which, when clicked, expands a collapsible card that contains the game rules.
+ The game is about guessing a 4-digit number with no repeated digits. For every guess that the player makes,
+ the number of bulls and cows are displayed. Bulls represent the number of digits that appear in both the guess and the target number
+ in the correct position, while cows represent the number of digits that appear in both the guess and the target number, but in the wrong position.
+ When the player guesses the target number with all digits in the correct position, they win the game.
+ @returns JSX element that displays the button for the game rules and the collapsible card with the rules
+ */
 const GameRules = () => {
     const [open, setOpen] = useState(false);
-
     return (
         <>
             <Button
@@ -15,7 +22,6 @@ const GameRules = () => {
             >
                 Game rules
             </Button>
-
             <Collapse in={open} className={'mt-2'}>
                 <div>
                     <Card id="example-collapse-text" style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)', padding:"20px"}}>
