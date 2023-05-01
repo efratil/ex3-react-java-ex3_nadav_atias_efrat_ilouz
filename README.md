@@ -1,16 +1,15 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/YDg-_nm7)
 ## Authors
-* Name:  Email:
-* Name:  Email:
+Nadav Atis Email: nadavat@edu.hac.ac.il ID: 316092667
+Efrat Ilouz Email: efratil@edu.hac.ac.il ID: 211357595
 
 ## Explanations
-
-(Explain here your project)
-
+We created the game "Bulls & cows". We stuck to the instructions and the lecture example the lecturer showed. We used react to develop the client side, there is a button that allows running a new game, there is a button that displays the rules of the game. When the user wins they enter their name and then see where they are on the leaderboard. The leaderboard is managed by the server.
 ## How to use this template
 This is the template for a project where front-end and back-end are separated.
 The front-end is a React application, the back-end is a Java Web application
 including a Servlet for REST API endpoints.
+the url for the server side is - http://localhost:8080/java_react_war/api/highscores
 
 ### Create a run configuration for the Server
 * In IntelliJ, go to Run->Edit Configurations
