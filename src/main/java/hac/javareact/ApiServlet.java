@@ -34,26 +34,16 @@ public class ApiServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<PlayerInfo> playerInfoList = readHighScoresFromFile();
-        String name = request.getParameter("username");
-        String score = request.getParameter("score");
-        // Update the high scores list if a new score was submitted
-        if (name != null && score != null) {
-            int newScore = Integer.parseInt(score);
-            PlayerInfo newPlayer = new PlayerInfo(name, newScore);
-            updatePlayer(playerInfoList, newPlayer);
-            writeHighScoresToFile((PlayerInfo) playerInfoList);
-        }
         // Sort and filter the high scores
         playerInfoList = getTopPlayerInfoList(playerInfoList);
+
         // Return the high scores as a JSON array
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        out.println("Content type: " + response.getContentType());
-        String json = gson.toJson(playerInfoList);
-        PrintWriter out = response.getWriter();
-        out.print(json);
-        out.flush();
+        try {
+            response(response, HttpServletResponse.SC_OK, playerInfoList);
+        }
+        catch (IOException e){
+            response(response, HttpServletResponse.SC_BAD_REQUEST, "Something bad append, get message to your face");
+        }
     }
 
     /**
@@ -67,27 +57,21 @@ public class ApiServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
+//            if (request.getReader().lines().noneMatch(line -> line.contains("username")) || request.getReader().lines().noneMatch(line -> line.contains("score"))) {
+//                response(response,HttpServletResponse.SC_BAD_REQUEST, "Bad Request");
+//                return;
+//            }
             JsonObject json = JsonParser.parseReader(request.getReader()).getAsJsonObject();
-            response.setHeader("Access-Control-Allow-Origin", "*");
 
             String name = json.get("username").getAsString();
-            int score = json.get("score").getAsInt();
+            int score   = json.get("score").getAsInt();
 
-            // Add the new player score to the high scores set
-            if (name == null) {
-                response.setStatus(400);
-                response.getWriter().println("Bad request");
-                return;
-            }
             PlayerInfo newPlayer = new PlayerInfo(name, score);
-            // Write the updated high scores to file
-            writeHighScoresToFile(newPlayer);
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().println("Score saved to file successfully");
-        } catch (Exception e) {
-            response.setStatus(500);
-            response.getWriter().println(e.getMessage());
+            writeHighScoresToFile(newPlayer);// Write the updated high scores to file
 
+            response(response,HttpServletResponse.SC_OK,"Score saved to file successfully");
+        } catch (Exception e) {
+            response(response,HttpServletResponse.SC_INTERNAL_SERVER_ERROR,e.getMessage());
         }
     }
 
@@ -96,20 +80,18 @@ public class ApiServlet extends HttpServlet {
      * @return A list of PlayerInfo objects containing the high scores.
      * @throws IOException if there is an error reading the file.
      */
-    private static List<PlayerInfo> readHighScoresFromFile() throws IOException {
+    private static List<PlayerInfo> readHighScoresFromFile() {
         checkIfFileExist();
-
         List<PlayerInfo> highScoresList = new ArrayList<>();
         try (ObjectInputStream objectInputStream = new ObjectInputStream(Files.newInputStream(file.toPath()))) {
             highScoresList = (List<PlayerInfo>) objectInputStream.readObject();
-            return highScoresList;
         } catch (EOFException ignored) {
-            return highScoresList;
-        } catch (IOException | ClassNotFoundException e) {
+        }
+        catch (IOException | ClassNotFoundException e) {
             System.err.println("Failed to read high scores file");
             e.printStackTrace();
-            return highScoresList;
         }
+        return highScoresList;
     }
 
     /**
@@ -117,18 +99,18 @@ public class ApiServlet extends HttpServlet {
      * @param player A PlayerInfo object representing the new high score.
      * @throws IOException if there is an error writing the file.
      */
-    private static void writeHighScoresToFile(PlayerInfo player) throws IOException {
+    private void writeHighScoresToFile(PlayerInfo player) throws IOException {
         List<PlayerInfo> highScores = readHighScoresFromFile();
         updatePlayer(highScores, player);
-
-        List<PlayerInfo> topPlayers = getTopPlayerInfoList(highScores);
         // Write the updated high scores to file
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(Files.newOutputStream(file.toPath()))) {
-            objectOutputStream.writeObject(topPlayers);
-            objectOutputStream.flush();
-        } catch (IOException e) {
-            System.err.println("Failed to write high scores file");
-            throw new IOException("Failed to write high scores file");
+        synchronized(this) {
+            try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(Files.newOutputStream(file.toPath()))) {
+                objectOutputStream.writeObject(highScores);
+            }
+            catch (IOException e) {
+                System.err.println("Failed to write high scores file");
+                throw new IOException("Failed to write high scores file");
+            }
         }
     }
 
@@ -144,7 +126,8 @@ public class ApiServlet extends HttpServlet {
         for (PlayerInfo playerInfo : highScores) {
             if (Objects.equals(playerInfo.getName(), player.getName())) {
                 playerExists = true;
-                playerInfo.setScore(player.getScore());
+                if (player.getScore() < playerInfo.getScore())
+                    playerInfo.setScore(player.getScore());
                 break;
             }
         }
@@ -175,6 +158,14 @@ public class ApiServlet extends HttpServlet {
                 .sorted(Comparator.comparingInt(PlayerInfo::getScore))
                 .limit(MAX_SIZE)
                 .collect(Collectors.toList());
+    }
+    public void response(HttpServletResponse response, int statusCode, Object dataToSend) throws IOException{
+        response.setContentType("application/json");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(statusCode);
+        String json = gson.toJson(dataToSend);
+        response.getWriter().write(json);
     }
 
     @Override

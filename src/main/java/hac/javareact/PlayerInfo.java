@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Represents a player and their corresponding score.
  */
 public class PlayerInfo implements Serializable {
-    private final String name;
+    private final String username;
     private int score;
     /**
      * Creates a new instance of Player with the given name and score.
@@ -14,7 +14,7 @@ public class PlayerInfo implements Serializable {
      * @param score the score of the player
      */
     public PlayerInfo(String name, int score) {
-        this.name = name;
+        this.username = name;
         this.score = score;
     }
 
@@ -28,7 +28,7 @@ public class PlayerInfo implements Serializable {
      * @return the name of the player
      */
     public String getName() {
-        return name;
+        return username;
     }
 
     /**
